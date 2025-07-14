@@ -87,7 +87,7 @@ get_header();
 
   <h2>1. Responsable del tratamiento</h2>
   <p><strong>Nombre:</strong> Susanita Urban<br>
-     <strong>Email:</strong> susanitaurban2025@gmail.com<br>
+     <strong>Email:</strong> susanitaurban@gmail.com<br>
      <strong>Dirección:</strong> Juan II Kalea, 5, 01003 Vitoria-Gasteiz, Araba</p>
 
   <h2>2. Datos personales que recopilamos</h2>
