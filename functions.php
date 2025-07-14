@@ -1,41 +1,56 @@
 <?php
-// Cargar estilos del tema padre y del tema hijo
-add_action('wp_enqueue_scripts', function () {
-    // Estilos del tema padre
-    wp_enqueue_style('storefront-style', get_template_directory_uri() . '/style.css');
+/**
+ * Storefront Child Theme functions and definitions
+ */
 
-    // Estilos del tema hijo, con dependencia del padre
-    wp_enqueue_style('storefront-child-style', get_stylesheet_uri(), ['storefront-style']);
-});
-
-// Cambiar texto del botón "Añadir al carrito" en WooCommerce
-add_filter('woocommerce_product_add_to_cart_text', 'cambiar_texto_boton_tienda');
-function cambiar_texto_boton_tienda() {
-    return __('Añadir al carrito', 'woocommerce');
-}
-
-// Encolar script JS del tema hijo
-function tema_hijo_scripts() {
-    wp_enqueue_script(
-        'tema-hijo-script', // Handle único
-        get_stylesheet_directory_uri() . '/assets/js/main.js', // Ruta CORRECTA al archivo JS (añadida la barra antes de assets)
-        array(), // Dependencias, vacías porque tu script no usa jQuery explícitamente
-        filemtime(get_stylesheet_directory() . '/assets/js/main.js'), // Versión basada en modificación para cache busting
-        true // Cargar en el footer
+function storefront_child_enqueue_styles() {
+    $parent_style = 'storefront-style';
+    
+    wp_enqueue_style($parent_style, get_template_directory_uri() . '/style.css');
+    wp_enqueue_style('storefront-child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array($parent_style),
+        wp_get_theme()->get('Version')
     );
+    
+    wp_enqueue_style('custom-css', get_stylesheet_directory_uri() . '/assets/css/custom.css');
+    wp_enqueue_script('custom-js', get_stylesheet_directory_uri() . '/assets/js/main.js', array('jquery'), '1.0.0', true);
 }
-add_action('wp_enqueue_scripts', 'tema_hijo_scripts');
+add_action('wp_enqueue_scripts', 'storefront_child_enqueue_styles');
 
-// ELIMINAR MENÚ PRIMARIO DUPLICADO en Storefront
-function eliminar_menu_primario_storefront() {
-    remove_action('storefront_header', 'storefront_primary_navigation', 50);
-}
-add_action('init', 'eliminar_menu_primario_storefront');
+require_once get_stylesheet_directory() . '/inc/custom-functions.php';
 
-// OCULTAR CARRITO EN PORTADA
-function ocultar_carrito_en_portada() {
-    if (is_front_page()) {
-        remove_action('storefront_header', 'storefront_header_cart', 60);
+function agregar_fondo_personalizado() {
+    $url_imagen = wp_get_attachment_image_url(249, 'full');
+    if ($url_imagen) {
+        ?>
+        <style>
+            body::before {
+                content: "";
+                position: fixed;
+                top: 8em;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: url('<?php echo esc_url($url_imagen); ?>') center/cover no-repeat;
+                z-index: -1;
+            }
+        </style>
+        <?php
     }
 }
-add_action('wp', 'ocultar_carrito_en_portada');
+add_action('wp_head', 'agregar_fondo_personalizado');
+// En functions.php de tu tema hijo
+function susanita_woocommerce_styles() {
+    wp_enqueue_style('susanita-woocommerce', get_stylesheet_directory_uri() . '/assets/css/woocommerce.css');
+}
+add_action('wp_enqueue_scripts', 'susanita_woocommerce_styles');
+function susanita_woocommerce_responsive_styles() {
+    wp_enqueue_style(
+        'susanita-woocommerce', 
+        get_stylesheet_directory_uri() . '/assets/css/woocommerce.css',
+        array('storefront-woocommerce-style'), 
+        filemtime(get_stylesheet_directory() . '/assets/css/woocommerce.css')
+    );
+}
+add_action('wp_enqueue_scripts', 'susanita_woocommerce_responsive_styles', 30);

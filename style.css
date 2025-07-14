@@ -1,13 +1,18 @@
 /*
-Theme Name: Storefront child
+Theme Name: Storefront Child
+Theme URI: https://susanitaurban.com
+Description: Tema hijo de Storefront para Susanita Urban
+Author: Tu Nombre
+Author URI: https://susanitaurban.com
 Template: storefront
-*/
-/* ============================================= */
+Version: 1.0.0
+Text Domain: storefront-child
+*//* ============================================= */
 /*               DEFINICIONES DE FUENTES         */
 /* ============================================= */
 @font-face {
   font-family: 'Nanum Gothic';
-  src: url('./assets/fonts/NanumGothic-Regular.ttf') format('truetype');
+  src: url('assets/fonts/NanumGothic-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -15,7 +20,7 @@ Template: storefront
 
 @font-face {
   font-family: 'Nanum Gothic';
-  src: url('./assets/fonts/NanumGothic-Bold.ttf') format('truetype');
+  src: url('assets/fonts/NanumGothic-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -23,11 +28,12 @@ Template: storefront
 
 @font-face {
   font-family: 'Nanum Gothic';
-  src: url('./assets/fonts/NanumGothic-ExtraBold.ttf') format('truetype');
+  src: url('assets/fonts/NanumGothic-ExtraBold.ttf') format('truetype');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
+
 
 /* ============================================= */
 /*               VARIABLES CSS                   */
@@ -66,6 +72,7 @@ Template: storefront
 }
 
 body {
+  padding-top: 90px; /* Ajusta según la altura real del header */
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 400;
   line-height: 1.6;
@@ -469,27 +476,42 @@ img {
 .carousel-controls {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-.carousel-prev, 
+.carousel-prev,
 .carousel-next {
   background: var(--primary-color);
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
 }
 
 .carousel-prev:hover,
 .carousel-next:hover {
   background: var(--primary-dark);
-  transform: scale(1.1);
+  transform: scale(1.15);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
 }
+
+/* Opcional: añadir un efecto de sombra interior para que se vea "más profundo" */
+.carousel-prev:active,
+.carousel-next:active {
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);
+  transform: scale(1.05);
+}
+
 
 /* ============================================= */
 /*               SECCIÓN PERSONALIZACIÓN        */
@@ -1020,4 +1042,43 @@ img {
   .carousel-slide {
     flex: 0 0 30%;
   }
+}
+/* Estructura básica del menú */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #333; /* Ajusta el color según tu tema */
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #d94f5c; /* Color hover (rojo suave) */
+}
+
+/* Opcional: Ocultar texto en móviles */
+@media (max-width: 768px) {
+    .menu-text {
+        display: none;
+    }
+    .nav-links {
+        gap: 1.2rem;
+    }
 }
