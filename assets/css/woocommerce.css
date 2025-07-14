@@ -1,0 +1,248 @@
+/* ============================================= */
+/*               TIENDA SUSANITA URBAN           */
+/* ============================================= */
+
+/* Fondo general para todas las páginas de WooCommerce */
+body.woocommerce-page:not(.home)::before {
+    background-image: url('./assets/img/fondo-tienda-pattern.png');
+    background-size: 30%;
+    background-repeat: repeat;
+    opacity: 0.08;
+    top: 0;
+    height: 100%;
+}
+
+/* Contenedor principal de la tienda */
+.woocommerce-page .site-main {
+    background-color: var(--white);
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin: 4rem auto;
+    max-width: 1200px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Productos individuales */
+.single-product .site-main {
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.98) 0%, 
+        rgba(249, 248, 246, 0.95) 100%
+    );
+    border: 1px solid rgba(33, 7, 180, 0.1);
+}
+
+/* Cabecera de la tienda */
+.woocommerce-products-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Tarjetas de producto */
+.woocommerce ul.products li.product {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.woocommerce ul.products li.product:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+/* ============================================= */
+/*          MEDIA QUERIES - TIENDA WOOCOMMERCE   */
+/* ============================================= */
+
+/* Pantallas grandes (más de 1200px) */
+@media screen and (min-width: 1200px) {
+    .woocommerce-page .site-main {
+        padding: 4rem;
+        margin: 5rem auto;
+    }
+    
+    .woocommerce ul.products.columns-4 li.product {
+        width: calc(25% - 2rem);
+        margin: 0 1rem 2rem;
+    }
+}
+
+/* Tablets en horizontal y pantallas medianas (992px - 1199px) */
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+    .woocommerce-page .site-main {
+        padding: 3rem;
+    }
+    
+    .woocommerce ul.products.columns-3 li.product {
+        width: calc(33.333% - 1.5rem);
+    }
+    
+    .single-product div.product .woocommerce-product-gallery {
+        width: 48%;
+    }
+    
+    .single-product div.product .summary {
+        width: 48%;
+    }
+}
+
+/* Tablets en vertical y pantallas pequeñas (768px - 991px) */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .woocommerce-page .site-main {
+        padding: 2rem;
+        margin: 3rem auto;
+    }
+    
+    .woocommerce ul.products.columns-2 li.product {
+        width: calc(50% - 1rem);
+    }
+    
+    .woocommerce-page .woocommerce-breadcrumb {
+        font-size: 0.9rem;
+    }
+    
+    .single-product div.product .woocommerce-product-gallery,
+    .single-product div.product .summary {
+        width: 100%;
+        float: none;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Móviles grandes (576px - 767px) */
+@media screen and (min-width: 576px) and (max-width: 767px) {
+    .woocommerce-page .site-main {
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+    
+    .woocommerce ul.products li.product {
+        width: calc(50% - 1rem);
+    }
+    
+    .woocommerce .woocommerce-result-count,
+    .woocommerce .woocommerce-ordering {
+        float: none;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .woocommerce-cart table.cart .product-thumbnail {
+        display: none;
+    }
+}
+
+/* Móviles pequeños (hasta 575px) */
+@media screen and (max-width: 575px) {
+    .woocommerce-page .site-main {
+        padding: 1rem;
+        margin: 1rem auto;
+        border-radius: 0;
+    }
+    
+    .woocommerce ul.products li.product {
+        width: 100%;
+        margin: 0 0 1.5rem;
+    }
+    
+    .woocommerce-page .page-title {
+        font-size: 1.8rem;
+    }
+    
+    /* Ajustes para carrito */
+    .woocommerce-cart table.cart {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* Producto individual */
+    .single-product div.product .product_title {
+        font-size: 1.5rem;
+    }
+    
+    /* Checkout */
+    .woocommerce-checkout .col2-set .col-1,
+    .woocommerce-checkout .col2-set .col-2 {
+        width: 100%;
+        float: none;
+    }
+}
+
+/* Pantallas muy pequeñas (hasta 400px) */
+@media screen and (max-width: 400px) {
+    .woocommerce #respond input#submit,
+    .woocommerce a.button,
+    .woocommerce button.button,
+    .woocommerce input.button {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .woocommerce .quantity .qty {
+        width: 60px;
+    }
+    
+    .woocommerce .cart-collaterals .cart_totals {
+        width: 100%;
+    }
+}
+
+/* Orientación landscape para móviles */
+@media screen and (max-width: 991px) and (orientation: landscape) {
+    .woocommerce ul.products li.product {
+        width: calc(50% - 1rem);
+    }
+    
+    .single-product div.product .woocommerce-product-gallery {
+        width: 45%;
+    }
+    
+    .single-product div.product .summary {
+        width: 50%;
+    }
+}
+
+/* Ajustes específicos para iPad Pro */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+    .woocommerce ul.products.columns-4 li.product {
+        width: calc(33.333% - 1.5rem);
+    }
+    
+    .woocommerce-page .site-main {
+        padding: 3rem;
+    }
+}
+
+/* High DPI Displays */
+@media 
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi) {
+    .woocommerce-product-gallery__image img {
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .woocommerce-page:not(.home) .site-main {
+        background-color: rgba(30, 30, 30, 0.9);
+        color: #e0e0e0;
+    }
+    
+    .woocommerce ul.products li.product {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+    }
+    
+    .woocommerce .star-rating span::before {
+        color: var(--primary-color);
+    }
+}

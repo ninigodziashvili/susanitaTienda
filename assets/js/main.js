@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Actualizar año en el footer
-  document.getElementById('year').textContent = new Date().getFullYear();
+  // Actualizar año en el footer solo si existe el elemento
+  const yearElem = document.getElementById('year');
+  if (yearElem) {
+    yearElem.textContent = new Date().getFullYear();
+  }
 
   // Smooth scrolling para enlaces internos
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -30,14 +33,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Inicializar carruseles
   initCarousels();
+
+  // Configurar lightbox
+  setupLightbox();
+
+  // Configurar carrusel de 20 imágenes
+  setup20ImageCarousel();
 });
 
 function initCarousels() {
   document.querySelectorAll('.carousel-container').forEach(carousel => {
     const slides = carousel.querySelectorAll('.carousel-slide');
-    if (!slides.length) return; // Sin slides → salimos
+    if (!slides.length) return;
 
-    /* ======================  BOTONES  ====================== */
+    /* BOTONES */
     const controls = carousel.parentElement.querySelector('.carousel-controls');
     const prevBtn  = controls?.querySelector('.carousel-prev');
     const nextBtn  = controls?.querySelector('.carousel-next');
@@ -56,7 +65,7 @@ function initCarousels() {
       carousel.scrollBy({ left:  step(), behavior: 'smooth' });
     });
 
-    /* ======================  ARRASTRE  ====================== */
+    /* ARRASTRE */
     let active = false, startX = 0, scrollStart = 0;
 
     const dragStart = e => {
@@ -65,7 +74,7 @@ function initCarousels() {
       scrollStart = carousel.scrollLeft;
       carousel.classList.add('dragging');
       carousel.style.scrollBehavior = 'auto';
-      pauseAutoScroll();            // ⏸️  Pausamos mientras se arrastra
+      pauseAutoScroll();
     };
 
     const dragMove = e => {
@@ -79,22 +88,22 @@ function initCarousels() {
       active = false;
       carousel.classList.remove('dragging');
       carousel.style.scrollBehavior = 'smooth';
-      resumeAutoScroll();           // ▶️  Reanudamos al soltar
+      resumeAutoScroll();
     };
 
     carousel.addEventListener('pointerdown', dragStart,  { passive: true });
-    window.addEventListener  ('pointermove', dragMove,  { passive: true });
-    window.addEventListener  ('pointerup',   dragEnd,   { passive: true });
+    window.addEventListener('pointermove', dragMove,  { passive: true });
+    window.addEventListener('pointerup',   dragEnd,   { passive: true });
 
-    /* ======================  AUTOSCROLL  ====================== */
+    /* AUTOSCROLL */
     let autoId;
 
     const setupAutoScroll = (delay = 3500) => {
       autoId = setInterval(() => {
         const max = carousel.scrollWidth - carousel.clientWidth;
-        const atEnd = carousel.scrollLeft >= max - 2;     // márgen de seguridad
+        const atEnd = carousel.scrollLeft >= max - 2;
         carousel.scrollBy({
-          left: atEnd ? -max : step(),                    // si llegó al final → vuelve al inicio
+          left: atEnd ? -max : step(),
           behavior: 'smooth'
         });
       }, delay);
@@ -106,15 +115,14 @@ function initCarousels() {
       setupAutoScroll();
     };
 
-    // Opcional: pausa cuando el ratón entra y reanuda al salir (evita marear al usuario)
     carousel.addEventListener('mouseenter', pauseAutoScroll);
     carousel.addEventListener('mouseleave', resumeAutoScroll);
 
-    setupAutoScroll();  // ▶️ ¡Listo!  Arranca el auto‑scroll
+    setupAutoScroll();
   });
 }
-// ====================== LIGHTBOX ======================
-document.addEventListener('DOMContentLoaded', function() {
+
+function setupLightbox() {
   // Crear elementos del lightbox
   const lightbox = document.createElement('div');
   lightbox.id = 'lightbox';
@@ -149,25 +157,21 @@ document.addEventListener('DOMContentLoaded', function() {
       pointer-events: none;
       transition: opacity 0.3s;
     }
-    
     #lightbox.active {
       opacity: 1;
       pointer-events: all;
     }
-    
     .lightbox-content {
       position: relative;
       max-width: 90%;
       max-height: 90%;
     }
-    
     .lightbox-content img {
       max-height: 80vh;
       max-width: 90vw;
       display: block;
       border-radius: 8px;
     }
-    
     .lightbox-nav {
       position: absolute;
       top: 0;
@@ -176,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
       justify-content: space-between;
       padding: 10px;
     }
-    
     .lightbox-close, .lightbox-prev, .lightbox-next {
       background: rgba(0, 0, 0, 0.5);
       color: white;
@@ -187,24 +190,10 @@ document.addEventListener('DOMContentLoaded', function() {
       border-radius: 50%;
       transition: all 0.3s ease;
     }
-    
-    .lightbox-close {
-      right: 10px;
-    }
-    
-    .lightbox-prev {
-      left: 10px;
-    }
-    
-    .lightbox-next {
-      right: 10px;
-    }
-    
     .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover {
       background: rgba(0, 0, 0, 0.8);
       transform: scale(1.1);
     }
-    
     .lightbox-caption {
       text-align: center;
       color: white;
@@ -229,23 +218,17 @@ document.addEventListener('DOMContentLoaded', function() {
     img.src = imageSrc;
     img.alt = altText;
     
-    // Buscar el caption correspondiente
     const parentSlide = clickedImage.closest('.carousel-slide');
     if (parentSlide) {
       const slideCaption = parentSlide.querySelector('.carousel-caption');
-      if (slideCaption) {
-        caption.textContent = slideCaption.textContent;
-      } else {
-        caption.textContent = altText;
-      }
+      caption.textContent = slideCaption ? slideCaption.textContent : altText;
     } else {
       caption.textContent = altText;
     }
     
     lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Evitar scroll del body
+    document.body.style.overflow = 'hidden';
     
-    // Configurar navegación
     images = Array.from(document.querySelectorAll('.carousel-slide img, .producto-img'));
     captions = images.map(img => {
       const parent = img.closest('.carousel-slide');
@@ -280,18 +263,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Event listeners
   document.addEventListener('click', function(e) {
-    // Detectar clic en imágenes de carrusel o productos
     if (e.target.matches('.carousel-image, .producto-img, .producto-del-mes img, .bio-img, .process-img, .personaliza-img img')) {
       e.preventDefault();
       openLightbox(e.target.src, e.target.alt, e.target);
     }
     
-    // Cerrar lightbox
-    if (e.target.matches('.lightbox-close, #lightbox:not(.lightbox-content):not(.lightbox-nav):not(.lightbox-caption)')) {
+    if (e.target.matches('.lightbox-close, #lightbox')) {
       closeLightbox();
     }
     
-    // Navegación
     if (e.target.matches('.lightbox-prev')) {
       navigate(-1);
     }
@@ -301,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Navegación con teclado
   document.addEventListener('keydown', function(e) {
     if (!lightbox.classList.contains('active')) return;
     
@@ -329,38 +308,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function handleSwipe() {
     if (touchEndX < touchStartX - 50) {
-      navigate(1); // Swipe izquierda
+      navigate(1);
     } else if (touchEndX > touchStartX + 50) {
-      navigate(-1); // Swipe derecha
+      navigate(-1);
     }
   }
-});
+}
 
-// ====================== CARRUSEL DE 20 IMÁGENES ======================
-document.addEventListener('DOMContentLoaded', function() {
-  const personalizaImgContainer = document.querySelector('.personaliza-img');
-  
-  // Verificar si existe el contenedor
-  if (!personalizaImgContainer) return;
+function setup20ImageCarousel() {
+  const container = document.querySelector('.personaliza');
+  if (!container) return;
 
-  // Crear estructura del carrusel
-  personalizaImgContainer.innerHTML = `
-    <div class="carousel-container personaliza-carousel">
-      ${Array.from({length: 20}, (_, i) => `
-        <div class="carousel-slide">
-          <img src="assets/img/personalizacion-${i+1}.jpg" 
-               alt="Proceso de personalización ${i+1}" 
-               loading="lazy" 
-               class="carousel-image">
-        </div>
-      `).join('')}
-    </div>
-    <div class="carousel-controls">
-      <button class="carousel-prev" aria-label="Anterior">❮</button>
-      <button class="carousel-next" aria-label="Siguiente">❯</button>
-    </div>
-  `;
+  // Crear un carrusel dentro de la sección
+  const carouselWrapper = document.createElement('div');
+  carouselWrapper.className = 'carousel-wrapper personaliza-carousel';
 
-  // Inicializar el carrusel (usa tu función existente)
+  const carousel = document.createElement('div');
+  carousel.className = 'carousel-container';
+
+  // Añadir 20 imágenes al carrusel
+  for (let i = 1; i <= 20; i++) {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+
+    const img = document.createElement('img');
+    img.src = `assets/img/personaliza${i}.webp`;
+    img.alt = `Personaliza ${i}`;
+    img.className = 'personaliza-img';
+
+    slide.appendChild(img);
+    carousel.appendChild(slide);
+  }
+
+  // Crear controles para el carrusel
+  const controls = document.createElement('div');
+  controls.className = 'carousel-controls';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'carousel-prev';
+  prevBtn.textContent = '‹';
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'carousel-next';
+  nextBtn.textContent = '›';
+
+  controls.appendChild(prevBtn);
+  controls.appendChild(nextBtn);
+
+  carouselWrapper.appendChild(carousel);
+  carouselWrapper.appendChild(controls);
+
+  // Insertar el carrusel en la sección personaliza
+  container.appendChild(carouselWrapper);
+
+  // Inicializar carrusel (reutilizando initCarousels)
   initCarousels();
-});
+}
